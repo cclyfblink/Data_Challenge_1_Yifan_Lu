@@ -1,0 +1,74 @@
+---
+title: "Data Challenge 1"
+output: html_document
+author: "Yifan Lu"
+---
+
+## load in the required libraries 
+
+```{r}
+library(readr)
+library(tidyverse)
+library(here)
+
+## read in the data using here() function
+state_milk_production <- read_csv(here("data/state_milk_production.csv"))
+clean_cheese <- read_csv(here("data/clean_cheese.csv"))
+fluid_milk_sales <- read_csv(here("data/fluid_milk_sales.csv"))
+milk_products_facts <- read_csv(here("data/milk_products_facts.csv"))
+milkcow_facts <- read_csv(here("data/milkcow_facts.csv"))
+
+## disable scientific notation
+options(scipen = 999)
+```
+# Figure 1
+Make a scatter plot showing the milk production in pounds versus the average number of milk cows using milkcow_facts. Write a caption for this plot.
+
+The x-axis will be the number of milk cows (in millions) and the y-axis will be milk production (in millions of pounds)
+Color the plot using a continuous variable of years
+Label the axes (do not use the variable name)
+Add a title for the plot
+Label the legend (do not use the variable name)
+```{r figure1}
+## Convert unit to millions
+milkcow_facts$milk_production_lbs_millions <- milkcow_facts$milk_production_lbs / 1e6
+milkcow_facts$avg_milk_cow_number_millions <- milkcow_facts$avg_milk_cow_number / 1e6
+
+milkcow_facts %>%
+    ggplot(aes(x = avg_milk_cow_number_millions,
+               y = milk_production_lbs_millions,
+               color = year)) +
+    geom_point() +
+    scale_color_continuous(name = "Year") +
+    labs(title = "Milk Production vs Number of Milk Cows",
+         x = "Number of Milk Cows (in millions)",
+         y = "Milk Production (in millions of pounds)",
+         caption = "Plot 1: The plot reveals a negative correlation between the number of\n milk cows and milk production."
+         ) +
+    theme(plot.caption = element_text(hjust = 0.5))
+```
+
+# Figure 2
+Examine the milk total milk production in each region over time using state_milk_production. We will plot line plots for the milk production versus the year faceted by region. Write a caption for this plot.
+
+First, find the total production of milk each year by region (hint: use summarise() to find this)
+The x-axis will be time and the y-axis will be total milk produced (in millions of pounds) in the region that year
+Make line plots and color each line a different color
+Facet the plot by region
+Label the axes (do not use the variable name)
+Add a title for the plot
+Remove the legend from the plot
+```{r figure2}
+state_milk_production %>%
+    group_by(year, region) %>%
+    summarise(total_production_by_region_millions = sum(milk_produced)/ 1e6) %>%
+    ggplot(aes(x = year, y = total_production_by_region_millions, color = region)) +
+    geom_line() +
+    facet_wrap(~region) +
+    labs(x = "Year",
+         y = "Total Milk Production (in millions of pounds)",
+         title = "Total Milk Production Over Time by Region",
+         caption = "Plot 2: This plot shows how total milk production changes over time by different region. It demonstrates that in\n 'Lake States', 'Mountain', 'Pacific', 'Southern Plains' regions, total milk production generally increases over time. \nOther regions had only subtle or no changes") +
+    theme(legend.position = "none",
+          plot.caption = element_text(hjust = 0.5))
+```
