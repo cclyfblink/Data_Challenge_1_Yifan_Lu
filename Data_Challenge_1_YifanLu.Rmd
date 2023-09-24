@@ -29,23 +29,29 @@ Color the plot using a continuous variable of years
 Label the axes (do not use the variable name)
 Add a title for the plot
 Label the legend (do not use the variable name)
-```{r figure1}
-## Convert unit to millions
+```{r, figure1}
+# Convert milk production from pounds to millions of pounds
 milkcow_facts$milk_production_lbs_millions <- milkcow_facts$milk_production_lbs / 1e6
+# Convert the number of milk cows to millions
 milkcow_facts$avg_milk_cow_number_millions <- milkcow_facts$avg_milk_cow_number / 1e6
 
+# Plotting the data
 milkcow_facts %>%
-    ggplot(aes(x = avg_milk_cow_number_millions,
-               y = milk_production_lbs_millions,
-               color = year)) +
-    geom_point() +
-    scale_color_continuous(name = "Year") +
-    labs(title = "Milk Production vs Number of Milk Cows",
-         x = "Number of Milk Cows (in millions)",
-         y = "Milk Production (in millions of pounds)",
-         caption = "Plot 1: The plot reveals a negative correlation between the number of\n milk cows and milk production."
-         ) +
-    theme(plot.caption = element_text(hjust = 0.5))
+    ggplot(aes(
+        x = avg_milk_cow_number_millions, # Set x-axis to the number of milk cows (in millions)
+        y = milk_production_lbs_millions, # Set y-axis to milk production (in millions of pounds)
+        color = year # Color the plot using a continuous variable of years 
+    )) +  
+    geom_point() + # Plot the data points in the graph
+    scale_color_continuous(name = "Year") + # Color the year continuously
+    labs(
+        title = "Milk Production vs Number of Milk Cows", # Set the title of the plot
+        x = "Number of Milk Cows (in millions)", # Label for x-axis
+        y = "Milk Production (in millions of pounds)", # Label for y-axis
+        caption = "Figure 1: This scatter plot visualizes the relationship between the number of milk cows\n and milk production over time. Each point represents a year, with its position\n determined by the number of milk cows (x-axis) and total milk production (y-axis) \n for that year. The color of each point corresponds to the specific year." # Caption for the plot
+        ) +
+    theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
+
 ```
 
 # Figure 2
@@ -58,17 +64,57 @@ Facet the plot by region
 Label the axes (do not use the variable name)
 Add a title for the plot
 Remove the legend from the plot
-```{r figure2}
+```{r, figure2}
+# Group the data by year and region
 state_milk_production %>%
     group_by(year, region) %>%
+    # Summarise the total milk production by region in millions of pounds
     summarise(total_production_by_region_millions = sum(milk_produced)/ 1e6) %>%
-    ggplot(aes(x = year, y = total_production_by_region_millions, color = region)) +
-    geom_line() +
-    facet_wrap(~region) +
-    labs(x = "Year",
-         y = "Total Milk Production (in millions of pounds)",
-         title = "Total Milk Production Over Time by Region",
-         caption = "Plot 2: This plot shows how total milk production changes over time by different region. It demonstrates that in\n 'Lake States', 'Mountain', 'Pacific', 'Southern Plains' regions, total milk production generally increases over time. \nOther regions had only subtle or no changes") +
-    theme(legend.position = "none",
-          plot.caption = element_text(hjust = 0.5))
+    # Plot the data
+    ggplot(aes(
+        x = year, # Set x-axis to year
+        y = total_production_by_region_millions, # Set y-axis to total milk production by region in millions of pounds
+        color = region # Color the plot by region
+    )) +
+    geom_line() + # Plot the data as a line graph
+    facet_wrap(~region) + # Create a separate plot for each region
+    labs(
+        x = "Year", # Label for x-axis
+        y = "Total Milk Production (in millions of pounds)", # Label for y-axis
+        title = "Total Milk Production Over Time by Region", # Set the title of the plot
+        caption = "Figure 2: This line graph visualizes the total milk production over time by region.\n Each line represents a region, with its position determined by the year (x-axis) \nand the total milk production in that region (y-axis). The color of each line corresponds \nto a specific region. The graph is faceted by region, meaning there is a separate \nplot for each region. This allows for easy comparison of milk production trends across regions." # Caption for the plot
+    ) +
+    theme(
+        legend.position = "none", # Hide the legend
+        plot.caption = element_text(hjust = 0.5) # Adjust the caption to middle
+    )
 ```
+
+# Figure 3
+Make a line plot showing the amount (in pounds) of each milk products sold over time using fluid_milk_sales. Write a caption for this plot.
+
+Do not include the category ‘Total Production’ in the plot
+The x-axis will be time and the y-axis will be pounds of product
+Each milk product will be a separate line on the plot
+A different color will be assigned for each milk product
+Make the plot on the log scale for better visualization
+Label the axes (do not use the variable name)
+Add a title for the plot
+Label the legend (do not use the variable name)
+
+```{r, figure3}
+fluid_milk_sales %>%
+    filter(milk_type != 'Total Production') %>% # Exclude 'Total Production' category
+    group_by(milk_type) %>%
+    ggplot(aes(x = year, y = pounds, color = milk_type)) + # Plot year on x-axis and pounds on y-axis, color by milk type
+    geom_line(lwd = 1) + # Use line plot
+    coord_trans(y = 'log10') + # Transform y-axis to log scale
+    labs(
+        title = "Milk Product Sales Over Time", # Title for the plot
+        x = "Year", # Label for x-axis
+        y = "Pounds of Product (Log Scale)", # Label for y-axis
+        color = "Milk Product", # Label for the legend
+        caption = "Figure 3: This plot shows the amount (in pounds) of each milk product sold over time.\n Each milk product is represented by a separate line on the plot.\n The plot is on a log scale for better visualization") +
+    theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
+```
+
