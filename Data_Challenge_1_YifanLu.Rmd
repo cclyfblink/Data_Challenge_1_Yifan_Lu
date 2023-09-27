@@ -4,7 +4,7 @@ author: "Yifan Lu"
 output:
   html_document:
     fig_height: 6
-    fig_width: 8
+    fig_width: 10
   word_document: default
   pdf_document: default
 ---
@@ -55,7 +55,7 @@ milkcow_facts %>%
         title = "Milk Production vs Number of Milk Cows", # Set the title of the plot
         x = "Number of Milk Cows (in millions)", # Label for x-axis
         y = "Milk Production (in millions of pounds)", # Label for y-axis
-        caption = "Figure 1: This scatter plot visualizes the relationship between the number of milk cows\n and milk production over time. Each point represents a year, with its position\n determined by the number of milk cows (x-axis) and total milk production (y-axis) \n for that year. The color of each point corresponds to the specific year." # Caption for the plot
+        caption = "Figure 1: This scatter plot visualizes the relationship between the number of milk cows\n and milk production over time. Each point represents a year, with its position\n determined by the number of milk cows (x-axis) and total milk production (y-axis) \n for that year. The color of each point corresponds to the specific year.\n The milk production and number of milk cows seems negatively related. And milk production increased over time." # Caption for the plot
         ) +
     theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
 
@@ -89,7 +89,7 @@ state_milk_production %>%
         x = "Year", # Label for x-axis
         y = "Total Milk Production (in millions of pounds)", # Label for y-axis
         title = "Total Milk Production Over Time by Region", # Set the title of the plot
-        caption = "Figure 2: This line graph visualizes the total milk production over time by region.\n Each line represents a region, with its position determined by the year (x-axis) \nand the total milk production in that region (y-axis). The color of each line corresponds \nto a specific region. The graph is faceted by region, meaning there is a separate \nplot for each region. This allows for easy comparison of milk production trends across regions." # Caption for the plot
+        caption = "Figure 2: This line graph visualizes the total milk production over time by region.\n Each line represents a region, with its position determined by the year (x-axis) \nand the total milk production in that region (y-axis). The color of each line corresponds \nto a specific region. The graph is faceted by region, meaning there is a separate \nplot for each region. This allows for easy comparison of milk production trends across regions. \n Lake States, Mountain, Pacific and Southern Plains have increased total milk production \n over time. While other regions only have subtle changes." # Caption for the plot
     ) +
     theme(
         legend.position = "none", # Hide the legend
@@ -120,7 +120,7 @@ fluid_milk_sales %>%
          x = "Year", # Label for x-axis
          y = "Pounds of Product (Log Scale)", # Label for y-axis
          color = "Milk Product", # Label for the legend
-         caption = "Figure 3: This plot shows the amount (in pounds) of each milk product sold over time.\n Each milk product is represented by a separate line on the plot.\n The plot is on a log scale for better visualization.") +
+         caption = "Figure 3: This plot shows the amount (in pounds) of each milk product sold over time.\n Each milk product is represented by a separate line on the plot.\n The plot is on a log scale for better visualization. \n Whole milk, Flavored(Whole) and Buttermilk sales decreased over time. \n Reduced Fat(2%), Flavored (Not Whole), Low Fat(1%) and Eggnog all have increased sales. \n Skim and Flavored(Whole) sales oscillated over time.") +
     theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
 ```
 
@@ -154,7 +154,7 @@ clean_cheese_long %>%
          x = "Year", # Label for x-axis
          y = "Pounds of Cheese", # Label for y-axis
          fill = "Cheese Categories",
-         caption = "Figure 4: This stacked bar plot shows how the comsumption of different categories of \n cheese changes over time. Each bar represents a year. And each sub-bars \n are colored according to their cheese categories.")  +
+         caption = "Figure 4: This stacked bar plot shows how the comsumption of different categories of \n cheese changes over time. Each bar represents a year. And each sub-bars \n are colored according to their cheese categories.\n Total cheese consumption increased over time. Among those categories, \n mozzarella cheese have the most increased proportion.")  +
     theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
 ```
 
@@ -182,9 +182,9 @@ combined_data_long <- combined_data %>%
 ggplot(combined_data_long, aes(x = year, y = value, color = variable)) +
     geom_line(lwd = 2) + # Add lines to the plot and adjust thickness of the line
     labs(x = "Year", y = "Scaled Value",
-         title = "Scaled Milk Cow's Dairy Ration and Average Price of Milk Over Time",
+         title = "Scaled Milk Cows' Dairy Ration and Average Price of Milk Over Time",
          color = "Variable",
-         caption = "Figure 5: This plot visualizes the scaled values of Milk Cow's Dairy Ration and \n Average Price of Milk from 1980 to 2014. The values are scaled for better comparison. \n The Milk Cow's Dairy Ration is colored in red and the Average Price of Milk is colored in blue.  \nThe x-axis represents the year, and the y-axis represents the scaled values.") + # Add a caption to the plot
+         caption = "Figure 5: This plot visualizes the scaled values of Milk Cows' Dairy Ration and \n Average Price of Milk from 1980 to 2014. The values are scaled for better comparison. \n The Milk Cows' Dairy Ration is colored in red and the Average Price of Milk is colored in blue.  \nThe x-axis represents the year, and the y-axis represents the scaled values.\n As the milk cows' dairy ration began to rise at the year of 2006, \n average price of milk dropped subsequently few years later.") + # Add a caption to the plot
     theme(plot.caption = element_text(hjust = 0.5)) + # Adjust the caption to middle
     scale_color_manual(values=c("red", "blue"), # Change color scale to red and blue 
                        labels = c("Milk Cow's Dairy Ration", "Average Price of Milk")) 
