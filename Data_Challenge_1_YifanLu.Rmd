@@ -159,35 +159,31 @@ clean_cheese_long %>%
 Time to be creative! Make an original figure using the data. Join two of the dataframes together and use variables from both sides of the join to make this figure. This figure should tell a story and be easy to understand (just as the figures above are!). Change the colors of this plot from the default ggplot2 colors. Write a caption for this plot.
 
 ```{r}
-total_milk_sales <- fluid_milk_sales %>%
-    filter(milk_type == "Total Production", year >= 1980 & year <= 2014) %>%
-    mutate(pounds = scale(pounds)) %>%
-    select(year, pounds)
+# Filter and scale the total milk sales data
+scaled_total_milk_sales <- fluid_milk_sales %>%
+    filter(year >= 1980 & year <= 2014, milk_type == "Total Production") %>% # Filter data for years 1980 to 2014 and for total production
+    mutate(pounds = scale(pounds)) %>% # Scale the pounds column
+    select(year, pounds) # Select the year and pounds columns
 
-avg_milk_cow_number <- milkcow_facts %>%
-    mutate(avg_milk_cow_number = scale(avg_milk_cow_number)) %>%
-    select(year, avg_milk_cow_number)
+# Scale the average price of milk data
+scaled_avg_price_milk <- data.frame(year = 1980:2014, dairy_ration = scale(milkcow_facts$dairy_ration))
 
-milk_production_lbs <- milkcow_facts %>%
-    mutate(milk_production_lbs = scale(milk_production_lbs)) %>%
-    select(year, milk_production_lbs)
+# Combine the two data frames
+combined_data <- merge(scaled_total_milk_sales, scaled_avg_price_milk, by = "year")
 
-# Combine the three datasets
-combined_data <- total_milk_sales %>%
-    inner_join(avg_milk_cow_number, by = "year") %>%
-    inner_join(milk_production_lbs, by = "year")
-
-# Convert to longer format
+# Convert to long format
 combined_data_long <- combined_data %>%
-    pivot_longer(cols = -year, names_to = "variable", values_to = "value")
+    pivot_longer(cols = c(pounds, dairy_ration), names_to = "variable", values_to = "value") # Pivot the data to long format
 
 # Create the plot
 ggplot(combined_data_long, aes(x = year, y = value, color = variable)) +
-    geom_line(lwd = 2) +
-    labs(x = "Year", y = "Normalized Value", color = "Variable",
-         title = "Combined Plot of Normalized Total Milk Sales, \n Average Milk Cow Number and Milk Production") +
-    scale_color_brewer(palette = "Dark2") +
-    scale_color_discrete(name = "Variable",
-                         labels = c("Average Milk Cow Number", "Milk Production", "Total Milk Sales"))
+    geom_line(lwd = 2) + # Add lines to the plot and adjust thickness of the line
+    labs(x = "Year", y = "Scaled Value",
+         title = "Scaled Milk Cow's Dairy Ration and Average Price of Milk Over Time",
+         color = "Variable",
+         caption = "Figure 5: This plot visualizes the scaled values of Milk Cow's Dairy Ration and \n Average Price of Milk from 1980 to 2014. The values are scaled for better comparison. \n The Milk Cow's Dairy Ration is colored red and the Average Price of Milk is colored blue.  \nThe x-axis represents the year, and the y-axis represents the scaled values.") + # Add a caption to the plot
+    theme(plot.caption = element_text(hjust = 0.5)) + # Adjust the caption to middle
+    scale_color_discrete(labels = c("Milk Cow's Dairy Ration", "Average Price of Milk")) # Add a color scale to the plot
+
 ```
 
