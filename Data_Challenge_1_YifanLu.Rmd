@@ -3,10 +3,13 @@ title: "Data Challenge 1"
 author: "Yifan Lu"
 output:
   html_document:
-    df_print: paged
+    fig_height: 6
+    fig_width: 8
   word_document: default
   pdf_document: default
 ---
+## Github Repository Link:
+https://github.com/cclyfblink/Data_Challenge_1_Yifan_Lu
 
 ## load in the required libraries 
 
@@ -117,7 +120,7 @@ fluid_milk_sales %>%
          x = "Year", # Label for x-axis
          y = "Pounds of Product (Log Scale)", # Label for y-axis
          color = "Milk Product", # Label for the legend
-         caption = "Figure 3: This plot shows the amount (in pounds) of each milk product sold over time.\n Each milk product is represented by a separate line on the plot.\n The plot is on a log scale for better visualization") +
+         caption = "Figure 3: This plot shows the amount (in pounds) of each milk product sold over time.\n Each milk product is represented by a separate line on the plot.\n The plot is on a log scale for better visualization.") +
     theme(plot.caption = element_text(hjust = 0.5)) # Adjust the caption to middle
 ```
 
@@ -181,9 +184,9 @@ ggplot(combined_data_long, aes(x = year, y = value, color = variable)) +
     labs(x = "Year", y = "Scaled Value",
          title = "Scaled Milk Cow's Dairy Ration and Average Price of Milk Over Time",
          color = "Variable",
-         caption = "Figure 5: This plot visualizes the scaled values of Milk Cow's Dairy Ration and \n Average Price of Milk from 1980 to 2014. The values are scaled for better comparison. \n The Milk Cow's Dairy Ration is colored red and the Average Price of Milk is colored blue.  \nThe x-axis represents the year, and the y-axis represents the scaled values.") + # Add a caption to the plot
+         caption = "Figure 5: This plot visualizes the scaled values of Milk Cow's Dairy Ration and \n Average Price of Milk from 1980 to 2014. The values are scaled for better comparison. \n The Milk Cow's Dairy Ration is colored in red and the Average Price of Milk is colored in blue.  \nThe x-axis represents the year, and the y-axis represents the scaled values.") + # Add a caption to the plot
     theme(plot.caption = element_text(hjust = 0.5)) + # Adjust the caption to middle
-    scale_color_discrete(labels = c("Milk Cow's Dairy Ration", "Average Price of Milk")) # Add a color scale to the plot
-
+    scale_color_manual(values=c("red", "blue"), # Change color scale to red and blue 
+                       labels = c("Milk Cow's Dairy Ration", "Average Price of Milk")) 
 ```
 
